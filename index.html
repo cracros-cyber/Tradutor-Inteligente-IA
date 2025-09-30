@@ -9,12 +9,13 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Import Map: versão única e consistente -->
+  <!-- Import Map: Corrigido para uma versão única e consistente -->
   <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@18.3.1",
-    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react": "https://esm.sh/react@next",
+    "react-dom": "https://esm.sh/react-dom@next",
+    "react-dom/client": "https://esm.sh/react-dom@next/client",
     "@google/genai": "https://esm.sh/@google/genai@0.14.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
     "react/": "https://aistudiocdn.com/react@^19.1.1/"
@@ -24,7 +25,7 @@
 </head>
 <body class="bg-gray-900 text-white">
   <div id="root"></div>
-  <!-- Aponte para o seu arquivo TSX/JS já corrigido -->
+  <!-- Aponte para o seu arquivo TSX/JS -->
   <script type="module" src="/index.tsx"></script>
 </body>
 </html>
