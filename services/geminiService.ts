@@ -21,11 +21,11 @@ const translationSchema = {
   properties: {
     detectedLanguage: {
       type: Type.STRING,
-      description: 'The detected ISO 639-1 language code of the input text (e.g., "en", "pt", "es").',
+      description: 'O código de idioma ISO 639-1 detectado do texto de entrada (por exemplo, "en", "pt", "es").',
     },
     translatedText: {
       type: Type.STRING,
-      description: 'The translated text.',
+      description: 'O texto traduzido.',
     },
   },
   required: ['detectedLanguage', 'translatedText'],
@@ -40,18 +40,18 @@ export const translateAndDetect = async (text: string, targetLang: Language, lan
 
   try {
     const prompt = `
-      You are an expert polyglot translator.
-      Your task is to analyze the following text, identify its language, and then translate it to the target language specified.
+      Você é um tradutor poliglota especialista.
+      Sua tarefa é analisar o texto a seguir, identificar seu idioma e, em seguida, traduzi-lo para o idioma de destino especificado.
 
-      The target language for this translation is: ${langName} (${targetLang})
+      O idioma de destino para esta tradução é: ${langName} (${targetLang})
 
-      The response must be a valid JSON object that conforms to the provided schema.
-      - "detectedLanguage" must be the ISO 639-1 code for the detected language of the input.
-      - "translatedText" must contain the translated content.
+      A resposta deve ser um objeto JSON válido que esteja em conformidade com o esquema fornecido.
+      - "detectedLanguage" deve ser o código ISO 639-1 para o idioma detectado da entrada.
+      - "translatedText" deve conter o conteúdo traduzido.
       
-      If the input text is gibberish, nonsensical, or empty, return an empty string for "translatedText" and an empty string for "detectedLanguage".
+      Se o texto de entrada for um jargão, sem sentido ou vazio, retorne uma string vazia para "translatedText" e uma string vazia para "detectedLanguage".
 
-      Input text:
+      Texto de entrada:
       ---
       ${text}
       ---
@@ -69,7 +69,7 @@ export const translateAndDetect = async (text: string, targetLang: Language, lan
     
     const jsonString = response.text.trim();
     if (!jsonString) {
-      console.warn("Received empty response from Gemini API. This might be due to safety settings.");
+      console.warn("Resposta vazia recebida da API Gemini. Isso pode ser devido às configurações de segurança.");
       // Return a predictable empty state that App.tsx can handle gracefully.
       return { translatedText: '', detectedLanguage: '' };
     }
@@ -80,15 +80,15 @@ export const translateAndDetect = async (text: string, targetLang: Language, lan
         return result as TranslationResponse;
     }
 
-    console.error("Invalid JSON structure received from API:", result);
-    throw new Error("Received invalid data structure from translation API.");
+    console.error("Estrutura JSON inválida recebida da API:", result);
+    throw new Error("Estrutura de dados inválida recebida da API de tradução.");
 
   } catch (error) {
     if (error instanceof Error && error.message === "API_KEY_MISSING") {
         throw error;
     }
-    console.error("Error in translateAndDetect service:", error);
+    console.error("Erro no serviço translateAndDetect:", error);
     // Let the UI handle this with a generic message
-    throw new Error("Failed to get translation from Gemini API.");
+    throw new Error("Falha ao obter tradução da API Gemini.");
   }
 };

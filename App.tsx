@@ -76,7 +76,7 @@ const App: React.FC = () => {
               } catch (e) {
                   console.warn("Could not get display name for language code:", detectedLang);
               }
-              setError(`O idioma detectado (${detectedLangName}) não é suportado.`);
+              setError(<span>{`O idioma detectado (${detectedLangName}) não é suportado.`}</span>);
               setTranslatedText(''); 
           }
       }
@@ -85,7 +85,7 @@ const App: React.FC = () => {
     } catch (err) {
       if (err instanceof Error && err.message === 'API_KEY_MISSING') {
           setError(
-            <div className="flex flex-col items-center gap-2">
+            <>
               <span>A chave da API está faltando. A funcionalidade de tradução está desativada.</span>
               <a 
                 href="https://aistudio.google.com/app/apikey" 
@@ -95,11 +95,11 @@ const App: React.FC = () => {
               >
                 Obtenha sua chave do Google Gemini aqui.
               </a>
-            </div>
+            </>
           );
       } else {
           setError(
-            <div className="flex flex-col items-center gap-2">
+            <>
               <span>Falha ao traduzir. Por favor, tente novamente.</span>
               <button
                 onClick={() => getTranslation(inputText)}
@@ -107,7 +107,7 @@ const App: React.FC = () => {
               >
                 Tentar Novamente
               </button>
-            </div>
+            </>
           );
       }
       console.error(err);
@@ -214,19 +214,19 @@ const App: React.FC = () => {
         </div>
         {error && (
           <div 
-            className="mt-4 text-red-300 bg-red-900/50 p-4 rounded-lg flex flex-col sm:flex-row items-center justify-center text-center gap-3"
+            className="mt-4 text-red-300 bg-red-900/50 p-4 rounded-lg flex flex-col sm:flex-row items-center justify-center text-center gap-3 fade-in-error"
             role="alert"
           >
               <div className="flex-shrink-0 text-red-400">
                 <AlertTriangleIcon />
               </div>
-              <div>{error}</div>
+              <div className="flex flex-col items-center gap-1">{error}</div>
           </div>
         )}
       </main>
 
       <footer className="mt-8 text-center text-gray-500 text-sm">
-        <p>Powered by Google Gemini API</p>
+        <p>Desenvolvido com a API Google Gemini</p>
       </footer>
     </div>
   );
