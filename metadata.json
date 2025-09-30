@@ -1,0 +1,5 @@
+{
+  "name": "Tradutor Inteligente AI",
+  "description": "Um aplicativo de tradução multilíngue que detecta e traduz automaticamente texto entre vários idiomas usando a API Gemini.",
+  "requestFramePermissions": []
+}
