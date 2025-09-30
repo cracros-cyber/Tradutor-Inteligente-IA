@@ -3,6 +3,7 @@ import type { Language } from './types';
 import { translateAndDetect } from './services/geminiService';
 import LanguageInput from './components/LanguageInput';
 import { SwapIcon } from './components/icons/SwapIcon';
+import { AlertTriangleIcon } from './components/icons/AlertTriangleIcon';
 
 const supportedLanguages: Record<Language, string> = {
   en: 'Inglês',
@@ -84,8 +85,8 @@ const App: React.FC = () => {
     } catch (err) {
       if (err instanceof Error && err.message === 'API_KEY_MISSING') {
           setError(
-            <>
-              A chave da API está faltando. A funcionalidade de tradução está desativada.{' '}
+            <div className="flex flex-col items-center gap-2">
+              <span>A chave da API está faltando. A funcionalidade de tradução está desativada.</span>
               <a 
                 href="https://aistudio.google.com/app/apikey" 
                 target="_blank" 
@@ -94,16 +95,26 @@ const App: React.FC = () => {
               >
                 Obtenha sua chave do Google Gemini aqui.
               </a>
-            </>
+            </div>
           );
       } else {
-          setError('Falha ao traduzir. Por favor, tente novamente.');
+          setError(
+            <div className="flex flex-col items-center gap-2">
+              <span>Falha ao traduzir. Por favor, tente novamente.</span>
+              <button
+                onClick={() => getTranslation(inputText)}
+                className="mt-1 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                Tentar Novamente
+              </button>
+            </div>
+          );
       }
       console.error(err);
     } finally {
       setIsLoading(false);
     }
-  }, [sourceLang, targetLang]);
+  }, [sourceLang, targetLang, inputText]);
 
   useEffect(() => {
     if (debounceTimeout.current) {
@@ -202,9 +213,15 @@ const App: React.FC = () => {
 
         </div>
         {error && (
-            <div className="mt-4 text-center text-red-400 bg-red-900/50 p-3 rounded-lg">
-                {error}
-            </div>
+          <div 
+            className="mt-4 text-red-300 bg-red-900/50 p-4 rounded-lg flex flex-col sm:flex-row items-center justify-center text-center gap-3"
+            role="alert"
+          >
+              <div className="flex-shrink-0 text-red-400">
+                <AlertTriangleIcon />
+              </div>
+              <div>{error}</div>
+          </div>
         )}
       </main>
 

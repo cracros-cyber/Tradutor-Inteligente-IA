@@ -13,6 +13,8 @@ interface LanguageInputProps {
   isReadOnly?: boolean;
   isLoading?: boolean;
   placeholder?: string;
+  onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
 }
 
 const LanguageInput: React.FC<LanguageInputProps> = ({
@@ -24,13 +26,30 @@ const LanguageInput: React.FC<LanguageInputProps> = ({
   isReadOnly = false,
   isLoading = false,
   placeholder,
+  onFocus,
+  onBlur,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(true);
+    if (onFocus) {
+      onFocus(e);
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(false);
+    if (onBlur) {
+      onBlur(e);
+    }
   };
 
   return (
@@ -43,7 +62,9 @@ const LanguageInput: React.FC<LanguageInputProps> = ({
           onChange={onChange}
           readOnly={isReadOnly}
           placeholder={placeholder}
-          className="w-full h-48 md:h-64 p-4 pr-10 bg-gray-900 border border-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 text-gray-200 placeholder-gray-500"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          className={`w-full h-48 md:h-64 p-4 pr-10 bg-gray-900 border rounded-lg resize-none focus:outline-none transition-colors duration-200 text-gray-200 placeholder-gray-500 ${isFocused ? 'ring-2 ring-blue-500 border-transparent' : 'border-gray-700'}`}
         />
         <div className="absolute top-3 right-3 flex flex-col gap-2">
             {value && !isReadOnly && onClear && (
